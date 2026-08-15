@@ -14,3 +14,7 @@ _*.js
 .DS_Store
 Thumbs.db
 *.log
+
+# 微信上传密钥（机密！切勿入库，单独由发布负责人保管）
+scripts/private.key
+*.key

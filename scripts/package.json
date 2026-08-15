@@ -1,0 +1,12 @@
+{
+  "name": "claw-release-scripts",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Claw 小程序生产发布脚本（miniprogram-ci 上传通道）",
+  "scripts": {
+    "upload": "node upload-ci.js"
+  },
+  "dependencies": {
+    "miniprogram-ci": "^2.0.0"
+  }
+}
