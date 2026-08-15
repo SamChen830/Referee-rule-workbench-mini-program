@@ -1,0 +1,45 @@
+<view class="page" wx:if="{{rule}}">
+  <!-- 条款正文 -->
+  <view class="card">
+    <view class="rd-head">
+      <view class="rd-badge">第{{rule.article}}条</view>
+      <view class="rd-title">{{rule.title}}</view>
+    </view>
+    <view class="rd-chapter">{{rule.chapterName}} · FIBA 2022 规则</view>
+    <view class="rd-tags" wx:if="{{rule.tags.length}}">
+      <text class="mini-tag" wx:for="{{rule.tags}}" wx:key="*this">{{item}}</text>
+    </view>
+    <view class="rd-body">
+      <view class="rd-p" wx:for="{{paragraphs}}" wx:key="index">{{item}}</view>
+    </view>
+  </view>
+
+  <!-- 官方规则解释（陈述 / 举例 / 解释） -->
+  <view class="card" wx:if="{{interpretations.length}}">
+    <view class="obri-head">
+      <view class="card-title">官方规则解释</view>
+      <view class="pill">OBRI V3.0 · {{interpretations.length}} 条</view>
+    </view>
+
+    <block wx:for="{{interpretations}}" wx:key="no"
+      wx:if="{{obriExpanded || index < 4}}">
+      <view class="obri-item">
+        <view class="obri-no">{{item.no}}</view>
+        <view class="obri-type {{item.type === '举例' ? 'type-ex' : (item.type === '解释' ? 'type-int' : '')}}">{{item.type}}</view>
+        <view class="obri-text">{{item.text}}</view>
+      </view>
+    </block>
+
+    <view class="obri-toggle" wx:if="{{interpretations.length > 4}}" bindtap="toggleObri">
+      {{obriExpanded ? '收起' : '展开全部 ' + interpretations.length + ' 条 ▾'}}
+    </view>
+  </view>
+
+  <view class="card obri-empty" wx:else>
+    官方规则解释未覆盖本条款（OBRI 仅对重点条款提供解释）。
+  </view>
+
+  <!-- 回到顶部（长条款 + 多条解释） -->
+  <view class="back-top" wx:if="{{showBackTop}}" bindtap="goTop"
+    hover-class="back-top-press" hover-stay-time="60">↑</view>
+</view>

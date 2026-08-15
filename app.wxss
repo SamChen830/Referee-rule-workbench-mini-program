@@ -1,0 +1,108 @@
+/* FIBA 裁判员工作台 · 全局设计系统 */
+page {
+  --green-900: #0A4A3A;
+  --green-700: #0F6E56;
+  --green-600: #14866A;
+  --green-100: #E7F3EF;
+  --green-050: #F2F8F5;
+  --amber-500: #D9930D;
+  --amber-100: #FBF0D9;
+  --red-500: #D64541;
+  --red-100: #FBE9E8;
+  --ink-900: #17231F;
+  --ink-600: #4A5A54;
+  --ink-400: #8A9993;
+  --line: #E3EAE6;
+  --bg: #F2F5F3;
+
+  background: var(--bg);
+  font-size: 28rpx;
+  color: var(--ink-900);
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+}
+
+.page {
+  padding: 24rpx 24rpx 48rpx;
+}
+
+/* 卡片 */
+.card {
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 28rpx;
+  margin-bottom: 24rpx;
+  box-shadow: 0 4rpx 16rpx rgba(15, 110, 86, 0.06);
+}
+
+.card-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: var(--ink-900);
+  margin-bottom: 20rpx;
+}
+
+/* 胶囊标签 */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 6rpx 20rpx;
+  border-radius: 999rpx;
+  font-size: 22rpx;
+  line-height: 1.6;
+  background: var(--green-100);
+  color: var(--green-700);
+}
+
+.pill-amber { background: var(--amber-100); color: var(--amber-500); }
+.pill-red { background: var(--red-100); color: var(--red-500); }
+
+/* 按钮 */
+.btn-primary {
+  background: var(--green-700);
+  color: #fff;
+  border-radius: 16rpx;
+  font-size: 30rpx;
+  font-weight: 600;
+}
+
+.btn-primary[disabled] {
+  background: #A8C5BC;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.btn-ghost {
+  background: var(--green-100);
+  color: var(--green-700);
+  border-radius: 16rpx;
+  font-size: 30rpx;
+  font-weight: 600;
+}
+
+button::after { border: none; }
+
+/* 回到顶部（共享：工作台 / 规则详情） */
+.back-top {
+  position: fixed;
+  right: 32rpx;
+  bottom: 120rpx;
+  width: 88rpx;
+  height: 88rpx;
+  border-radius: 50%;
+  background: var(--green-700);
+  color: #fff;
+  font-size: 40rpx;
+  text-align: center;
+  line-height: 84rpx;
+  box-shadow: 0 8rpx 24rpx rgba(15, 110, 86, 0.35);
+  z-index: 50;
+}
+
+.back-top-press { transform: scale(0.92); opacity: 0.85; }
+
+/* 按压反馈（共享） */
+.card-press {
+  background: #F7FAF8 !important;
+  transform: scale(0.985);
+}
+
+.chip-press { opacity: 0.65; }

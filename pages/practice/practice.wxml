@@ -1,0 +1,46 @@
+<view class="container" wx:if="{{!finished && current}}">
+  <view class="progress card">
+    <text>{{catName}}</text>
+    <text class="progress-num">{{index + 1}} / {{list.length}}</text>
+    <text class="progress-score">已答对 {{correctCount}}</text>
+  </view>
+
+  <view class="card question-card">
+    <view class="q-meta" wx:if="{{current.source}}">
+      <text class="q-source">{{current.source}}</text>
+    </view>
+    <view class="question-text">{{current.question}}</view>
+    <view class="options">
+      <view class="option {{selected === idx ? 'selected' : ''}} {{confirmed && idx === current.answer ? 'right' : ''}} {{confirmed && selected === idx && idx !== current.answer ? 'wrong' : ''}}"
+        wx:for="{{current.options}}" wx:for-item="opt" wx:for-index="idx" wx:key="*this"
+        hover-class="{{confirmed ? 'none' : 'option-press'}}" hover-stay-time="60"
+        bindtap="onSelect" data-idx="{{idx}}">
+        <text class="option-label">{{optionLabels[idx]}}</text>
+        <text class="option-text">{{opt}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="card explain" wx:if="{{confirmed}}">
+    <view class="explain-title {{selected === current.answer ? 'ok' : 'no'}}">
+      {{selected === current.answer ? '回答正确' : '回答错误，正确答案：' + optionLabels[current.answer]}}
+    </view>
+    <view class="explain-body">{{current.explanation}}</view>
+    <view class="explain-rule" wx:if="{{current.rule}}" bindtap="goRule"
+      hover-class="chip-press" hover-stay-time="60">依据：第{{current.rule}}条 {{current.ruleTitle}} ›</view>
+  </view>
+
+  <button class="btn-primary main-btn" wx:if="{{!confirmed}}" bindtap="onConfirm" disabled="{{selected < 0}}">确认答案</button>
+  <button class="btn-primary main-btn" wx:else bindtap="onNext">{{index + 1 === list.length ? '查看结果' : '下一题'}}</button>
+</view>
+
+<view class="container" wx:if="{{finished}}">
+  <view class="result-card card">
+    <view class="result-title">练习完成</view>
+    <view class="result-score">{{correctCount}} / {{list.length}}</view>
+    <view class="result-rate">正确率 {{resultPercent}}%</view>
+    <view class="result-tip">{{correctCount === list.length ? '全对，晋升考试稳了！' : '错题已收入错题本，回工作台「答题练习」可复习。'}}</view>
+  </view>
+  <button class="btn-primary main-btn" bindtap="onRestart">再来一轮</button>
+  <button class="btn-ghost main-btn" bindtap="goBack">返回分类</button>
+</view>

@@ -1,0 +1,52 @@
+.md-head {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12rpx;
+}
+
+.md-no {
+  background: var(--green-700);
+  color: #fff;
+  font-size: 24rpx;
+  font-weight: 700;
+  border-radius: 12rpx;
+  padding: 8rpx 18rpx;
+  margin-right: 20rpx;
+}
+
+.md-title { font-size: 34rpx; font-weight: 700; flex: 1; }
+
+.md-sec {
+  font-size: 22rpx;
+  color: var(--ink-400);
+  padding-bottom: 20rpx;
+  border-bottom: 2rpx solid var(--line);
+}
+
+.md-body { padding-top: 24rpx; }
+
+.md-p {
+  font-size: 28rpx;
+  line-height: 1.9;
+  color: var(--ink-900);
+  margin-bottom: 16rpx;
+}
+
+/* ===== 官方手势图 ===== */
+.gesture-card { margin-top: 24rpx; }
+
+.gesture-tip {
+  font-size: 22rpx;
+  color: var(--ink-400);
+  margin-bottom: 20rpx;
+  line-height: 1.6;
+}
+
+.gesture-img {
+  width: 100%;
+  display: block;
+  margin-bottom: 20rpx;
+  border-radius: 16rpx;
+  background: #fff;
+  box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.04);
+}

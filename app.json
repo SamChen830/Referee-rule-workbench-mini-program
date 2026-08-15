@@ -1,0 +1,17 @@
+{
+  "desc": "FIBA 篮球裁判员工作台",
+  "pages": [
+    "pages/index/index",
+    "pages/rule-detail/rule-detail",
+    "pages/mech-detail/mech-detail",
+    "pages/practice/practice"
+  ],
+  "window": {
+    "navigationBarBackgroundColor": "#0A4A3A",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#F2F5F3",
+    "backgroundTextStyle": "dark"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

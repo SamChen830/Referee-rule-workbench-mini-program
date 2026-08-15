@@ -1,0 +1,229 @@
+<view class="page"
+  bindtouchstart="onSwipeStart" bindtouchmove="onSwipeMove"
+  bindtouchend="onSwipeEnd" bindtouchcancel="onSwipeCancel">
+
+  <!-- 顶部品牌区 + 模式切换（系统导航栏已染成 FIBA 绿，此处为内容区头部） -->
+  <view class="hero">
+    <view class="hero-inner">
+      <view class="hero-title">FIBA 规则裁判员工作台</view>
+      <view class="hero-sub">2022 篮球规则 · 官方规则解释 · 执裁手册 · 晋升答题</view>
+    </view>
+    <view class="mode-switch">
+      <view class="mode-item {{mode === item.key ? 'active' : ''}}"
+        wx:for="{{modes}}" wx:key="key"
+        bindtap="onMode" data-key="{{item.key}}">{{item.name}}</view>
+    </view>
+    <view class="swipe-hint">← 左右滑动快速切换 →</view>
+  </view>
+
+  <!-- ============ 模式一：规则速查 ============ -->
+  <view wx:if="{{mode === 'rules'}}" class="panel {{panelDir === 'prev' ? 'panel-prev' : 'panel-next'}}">
+    <!-- 吸顶：搜索 + 筛选，吸在系统导航栏正下方（top:0），天然避开状态栏与胶囊 -->
+    <view class="sticky-bar">
+      <view class="search-bar">
+        <view class="search-icon">🔍</view>
+        <input class="search-input" placeholder="搜条款号 / 关键词，如 24秒钟、带球走（支持走步/打手等口语词）"
+          value="{{keyword}}" bindinput="onKeyword" confirm-type="search" />
+        <view class="search-clear" wx:if="{{keyword}}" bindtap="clearKeyword" hover-class="chip-press">✕</view>
+      </view>
+
+      <!-- 热门搜索词（未输入时展示） -->
+      <scroll-view class="chip-row hot-row" scroll-x enable-flex bindscroll="onChipScroll" wx:if="{{!keyword && !activeChapter && !activeTag}}">
+        <view class="chip hot-label">热搜</view>
+        <view class="chip tag" wx:for="{{hotKeywords}}" wx:key="*this" hover-class="chip-press"
+          bindtap="onHotKeyword" data-kw="{{item}}">{{item}}</view>
+      </scroll-view>
+
+      <scroll-view class="chip-row" scroll-x enable-flex scroll-with-animation bindscroll="onChipScroll"
+        scroll-into-view="{{chapterScroll}}">
+        <view id="chip-all" class="chip {{activeChapter === '' ? 'chip-on' : ''}}" hover-class="chip-press"
+          bindtap="onChapter" data-key="">全部</view>
+        <view id="c-{{item.key}}" class="chip {{activeChapter === item.key ? 'chip-on' : ''}}"
+          wx:for="{{chapters}}" wx:key="key" hover-class="chip-press"
+          bindtap="onChapter" data-key="{{item.key}}">{{item.label}} {{item.count}}</view>
+      </scroll-view>
+
+      <scroll-view class="chip-row" scroll-x enable-flex scroll-with-animation bindscroll="onChipScroll"
+        scroll-into-view="{{tagScroll}}" wx:if="{{tags.length}}">
+        <view id="tag-all" class="chip tag {{activeTag === '' ? 'tag-on' : ''}}" hover-class="chip-press"
+          bindtap="onTag" data-tag="">标签·全部</view>
+        <view id="t-{{index}}" class="chip tag {{activeTag === item ? 'tag-on' : ''}}"
+          wx:for="{{tags}}" wx:key="*this" hover-class="chip-press"
+          bindtap="onTag" data-tag="{{item}}" data-idx="{{index}}">{{item}}</view>
+      </scroll-view>
+
+      <view class="result-meta">{{ruleList.length}} / {{ruleTotal}} 条 · FIBA 2022 规则（V1.2 译本）</view>
+    </view>
+
+    <view class="rule-card" wx:for="{{ruleList}}" wx:key="id" bindtap="goRule" data-id="{{item.id}}"
+      hover-class="card-press" hover-stay-time="60">
+      <view class="rule-no">第{{item.article}}条</view>
+      <view class="rule-main">
+        <view class="rule-title-row">
+          <text class="rule-title">{{item.title}}</text>
+          <text class="pill obri" wx:if="{{item.obriCount > 0}}">解释 {{item.obriCount}} 条</text>
+        </view>
+        <view class="rule-summary">{{item.summary}}</view>
+        <view class="rule-tags" wx:if="{{item.tags.length}}">
+          <text class="mini-tag" wx:for="{{item.tags}}" wx:for-item="t" wx:key="*this">{{t}}</text>
+          <text class="mini-tag obri-hit" wx:if="{{item.matchedObri}}">命中官方解释</text>
+          <text class="rule-chapter">{{item.chapterName}}</text>
+        </view>
+      </view>
+      <view class="rule-arrow">›</view>
+    </view>
+
+    <view class="empty" wx:if="{{!ruleList.length}}">没有匹配的条款，换个关键词试试</view>
+  </view>
+
+  <!-- ============ 模式二：裁判法 ============ -->
+  <view wx:if="{{mode === 'mech'}}" class="panel {{panelDir === 'prev' ? 'panel-prev' : 'panel-next'}}">
+    <view class="sticky-bar">
+      <view class="search-bar">
+        <view class="search-icon">🔍</view>
+        <input class="search-input" placeholder="跨 M1-M4 全局搜索，如 轮转、LOB、追踪裁判"
+          value="{{mechKeyword}}" bindinput="onMechKeyword" confirm-type="search" />
+        <view class="search-clear" wx:if="{{mechKeyword}}" bindtap="clearMechKeyword" hover-class="chip-press">✕</view>
+      </view>
+      <view class="result-meta" wx:if="{{mechKeyword}}">跨板块搜索「{{mechKeyword}}」· 命中 {{mechTotal}} 项</view>
+    </view>
+
+    <!-- 搜索结果：按板块分组展示 -->
+    <block wx:if="{{mechKeyword}}">
+      <view wx:for="{{mechGroups}}" wx:for-item="grp" wx:key="key">
+        <view class="group-head">
+          <view class="sec-badge">{{grp.key}}</view>
+          <text class="group-name">{{grp.name}}</text>
+          <text class="group-count">{{grp.count}} 项</text>
+        </view>
+        <!-- 术语词条：直接展示 -->
+        <block wx:if="{{grp.isTerms}}">
+          <view class="term-card" wx:for="{{grp.items}}" wx:key="term">
+            <view class="term-head">
+              <text class="term-name">{{item.term}}</text>
+              <text class="pill" wx:if="{{item.abbr !== 'n/a'}}">{{item.abbr}}</text>
+            </view>
+            <view class="term-text">{{item.text}}</view>
+          </view>
+        </block>
+        <!-- 小节：命中上下文 + 跳详情 -->
+        <block wx:else>
+          <view class="mech-item mech-hit" wx:for="{{grp.items}}" wx:key="no"
+            bindtap="goMech" data-section="{{grp.key}}" data-no="{{item.no}}"
+            hover-class="card-press" hover-stay-time="60">
+            <view class="mech-line">
+              <text class="mech-no">{{item.no}}</text>
+              <text class="mech-title">{{item.title}}</text>
+              <text class="rule-arrow">›</text>
+            </view>
+            <view class="mech-snippet">{{item.snippet}}</view>
+          </view>
+        </block>
+      </view>
+      <view class="empty" wx:if="{{!mechGroups.length}}">没有匹配内容，换个词试试（如 轮转、前导、中央、记录台）</view>
+    </block>
+
+    <!-- 浏览模式：按板块折叠展开 -->
+    <block wx:else>
+      <block wx:for="{{mechSections}}" wx:for-item="sec" wx:key="key">
+        <view class="card sec-card" bindtap="toggleSection" data-key="{{sec.key}}" hover-class="card-press" hover-stay-time="60">
+          <view class="sec-head">
+            <view class="sec-badge">{{sec.key}}</view>
+            <view class="sec-info">
+              <view class="sec-name">{{sec.name}}</view>
+              <view class="sec-ver">{{sec.ver}} · {{sec.count}} 项</view>
+            </view>
+            <view class="sec-arrow {{expanded === sec.key ? 'open' : ''}}">▾</view>
+          </view>
+        </view>
+
+        <view wx:if="{{expanded === sec.key}}">
+          <!-- 术语表：直接展示词条 -->
+          <block wx:if="{{sec.isTerms}}">
+            <view class="term-card" wx:for="{{mechItems}}" wx:key="term">
+              <view class="term-head">
+                <text class="term-name">{{item.term}}</text>
+                <text class="pill" wx:if="{{item.abbr !== 'n/a'}}">{{item.abbr}}</text>
+              </view>
+              <view class="term-text">{{item.text}}</view>
+            </view>
+          </block>
+          <!-- 小节：跳详情 -->
+          <block wx:else>
+            <view class="mech-item" wx:for="{{mechItems}}" wx:key="no"
+              bindtap="goMech" data-section="{{sec.key}}" data-no="{{item.no}}"
+              hover-class="card-press" hover-stay-time="60">
+              <text class="mech-no">{{item.no}}</text>
+              <text class="mech-title">{{item.title}}</text>
+              <text class="mech-chars">{{item.chars}}字</text>
+              <text class="rule-arrow">›</text>
+            </view>
+          </block>
+          <view class="empty" wx:if="{{!mechItems.length}}">没有匹配内容</view>
+        </view>
+      </block>
+    </block>
+  </view>
+
+  <!-- ============ 模式三：答题练习 ============ -->
+  <view wx:if="{{mode === 'quiz'}}" class="panel {{panelDir === 'prev' ? 'panel-prev' : 'panel-next'}}">
+    <view class="card">
+      <view class="stat-grid">
+        <view class="stat">
+          <view class="stat-num">{{answered}}</view>
+          <view class="stat-label">累计答题</view>
+        </view>
+        <view class="stat">
+          <view class="stat-num green">{{accuracyText}}</view>
+          <view class="stat-label">正确率</view>
+        </view>
+        <view class="stat">
+          <view class="stat-num {{wrongCount > 0 ? 'red' : ''}}">{{wrongCount}}</view>
+          <view class="stat-label">错题本</view>
+        </view>
+        <view class="stat">
+          <view class="stat-num">{{totalQuestions}}</view>
+          <view class="stat-label">题库总量</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="card">
+      <view class="card-title">分类训练</view>
+      <view class="quiz-grid">
+        <view class="quiz-cat" wx:for="{{quizCats}}" wx:key="key"
+          bindtap="goPractice" data-cat="{{item.key}}" hover-class="card-press" hover-stay-time="60">
+          <view class="quiz-cat-name">{{item.name}}</view>
+          <view class="quiz-cat-count">{{item.count}} 题 ›</view>
+        </view>
+      </view>
+      <view class="quiz-actions">
+        <button class="btn-primary" bindtap="goPractice" data-cat="all">全部题目随机练</button>
+        <button class="btn-ghost" bindtap="goPractice" data-cat="wrong" disabled="{{wrongCount === 0}}">
+          错题重练（{{wrongCount}}）
+        </button>
+      </view>
+    </view>
+
+    <view class="card" wx:if="{{wrongList.length}}">
+      <view class="card-title">错题本（{{wrongList.length}}）</view>
+      <view class="wrong-item" wx:for="{{wrongList}}" wx:key="qid">
+        <view class="wrong-q">{{index + 1}}. {{item.question}}</view>
+        <view class="wrong-a">正确答案 {{item.answerLabel}}：{{item.answerText}}</view>
+        <view class="wrong-e">{{item.explanation}}</view>
+      </view>
+    </view>
+
+    <view class="card">
+      <view class="card-title">数据管理</view>
+      <view class="quiz-actions">
+        <button class="btn-danger" bindtap="resetData">重置答题统计</button>
+      </view>
+      <view class="data-tip">答题数据仅保存在本机，重置后将清空答题记录和错题本。</view>
+    </view>
+  </view>
+
+  <!-- 回到顶部（长列表） -->
+  <view class="back-top" wx:if="{{showBackTop}}" bindtap="goTop"
+    hover-class="back-top-press" hover-stay-time="60">↑</view>
+</view>

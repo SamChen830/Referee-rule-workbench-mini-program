@@ -1,0 +1,23 @@
+<view class="page" wx:if="{{item}}">
+  <view class="card">
+    <view class="md-head">
+      <view class="md-no" wx:if="{{item.no}}">{{item.no}}</view>
+      <view class="md-title">{{item.title || item.term}}</view>
+      <view class="pill" wx:if="{{item.abbr && item.abbr !== 'n/a'}}">{{item.abbr}}</view>
+    </view>
+    <view class="md-sec">{{sectionName}}</view>
+    <view class="md-body">
+      <view class="md-p" wx:for="{{paragraphs}}" wx:key="index">{{item}}</view>
+    </view>
+  </view>
+
+  <!-- 官方手势图 -->
+  <view class="card gesture-card" wx:if="{{images.length}}">
+    <view class="md-head">
+      <view class="md-title">官方手势图（共 {{images.length}} 页）</view>
+    </view>
+    <view class="gesture-tip">本图整理自 FIBA《篮球裁判员执裁手册》（2023 年 9 月版）附录 A，作为个人学习笔记与训练参考，点击图片可放大查看。</view>
+    <image class="gesture-img" wx:for="{{images}}" wx:for-item="img" wx:key="*this"
+      mode="widthFix" src="/images/gestures/{{img}}" show-menu-by-longpress data-src="/images/gestures/{{img}}" bindtap="previewImg" />
+  </view>
+</view>

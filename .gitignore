@@ -1,0 +1,16 @@
+# 依赖（小程序依赖由微信开发者工具注入，不入库）
+node_modules/
+
+# WorkBuddy 内部记忆与配置
+.workbuddy/
+
+# 数据提取中间产物（脚本与原始 dump，非运行所需）
+_*.py
+_*.txt
+_*.json
+_*.js
+
+# 系统/编辑器
+.DS_Store
+Thumbs.db
+*.log

@@ -1,0 +1,94 @@
+.rd-head {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12rpx;
+}
+
+.rd-badge {
+  background: var(--green-700);
+  color: #fff;
+  font-size: 24rpx;
+  font-weight: 700;
+  border-radius: 12rpx;
+  padding: 8rpx 20rpx;
+  margin-right: 20rpx;
+}
+
+.rd-title { font-size: 36rpx; font-weight: 700; flex: 1; }
+
+.rd-chapter { font-size: 22rpx; color: var(--ink-400); margin-bottom: 16rpx; }
+
+.rd-tags { display: flex; flex-wrap: wrap; gap: 12rpx; margin-bottom: 20rpx; }
+
+.mini-tag {
+  font-size: 20rpx;
+  color: var(--green-700);
+  background: var(--green-050);
+  border: 2rpx solid var(--green-100);
+  border-radius: 8rpx;
+  padding: 4rpx 16rpx;
+}
+
+.rd-body { border-top: 2rpx solid var(--line); padding-top: 24rpx; }
+
+.rd-p {
+  font-size: 28rpx;
+  line-height: 1.9;
+  color: var(--ink-900);
+  margin-bottom: 16rpx;
+}
+
+/* 官方解释 */
+.obri-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.obri-item {
+  padding: 22rpx 0;
+  border-bottom: 2rpx solid var(--line);
+}
+
+.obri-item:last-of-type { border-bottom: none; }
+
+.obri-no {
+  font-size: 22rpx;
+  color: var(--ink-400);
+  font-weight: 600;
+  margin-bottom: 8rpx;
+}
+
+.obri-type {
+  display: inline-block;
+  font-size: 20rpx;
+  border-radius: 8rpx;
+  padding: 2rpx 12rpx;
+  background: var(--green-100);
+  color: var(--green-700);
+  font-weight: 600;
+  margin-bottom: 10rpx;
+}
+
+.obri-type.type-ex { background: var(--amber-100); color: var(--amber-500); }
+.obri-type.type-int { background: #E8EEF7; color: #3D5A80; }
+
+.obri-text {
+  font-size: 26rpx;
+  line-height: 1.8;
+  color: var(--ink-600);
+}
+
+.obri-toggle {
+  text-align: center;
+  font-size: 24rpx;
+  color: var(--green-700);
+  font-weight: 600;
+  padding-top: 20rpx;
+}
+
+.obri-empty {
+  text-align: center;
+  color: var(--ink-400);
+  font-size: 24rpx;
+}
