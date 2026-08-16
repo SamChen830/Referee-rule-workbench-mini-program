@@ -10,6 +10,13 @@
 
 > 真机调试/发布需要在 [mp.weixin.qq.com](https://mp.weixin.qq.com) 注册小程序账号，将真实 AppID 填入 `project.config.json`。
 
+## 协作开发（团队）
+
+- 开发路线图（迭代 / 任务清单）：[docs/ROADMAP.md](docs/ROADMAP.md)
+- Git 工作流与发布规范（分支 / 提交 / 发版 / CI）：[docs/GIT_WORKFLOW.md](docs/GIT_WORKFLOW.md)
+- 本地校验：`node check.js`（数据完整性）；每次 push / PR 会由 `.github/workflows/ci.yml` 自动校验全部 JS 语法 + 页面文件齐全。
+- 数据文件（`data/*.js`）改动请走 PR，勿直接 push `master`。
+
 ## 功能
 
 | 页面 | 功能 |
