@@ -1,0 +1,64 @@
+name: Deploy · 上传至微信小程序
+
+# 触发方式：
+#   1) 打 tag 推送：git tag v1.0.3 && git push origin v1.0.3
+#   2) 手动触发：Actions → Deploy · 上传至微信小程序 → Run workflow（填版本号）
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      version:
+        description: '上传版本号（必须与 config.js 的 APP_VERSION 一致）'
+        required: true
+
+# 同一时刻只允许一个上传任务，避免并发覆盖微信「开发版」
+concurrency:
+  group: wechat-upload
+  cancel-in-progress: false
+
+jobs:
+  upload:
+    name: miniprogram-ci 上传开发版
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 配置 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: scripts/package.json
+
+      - name: 校验版本号一致
+        run: |
+          APP_VERSION=$(node -e "console.log(require('./config.js').APP_VERSION)")
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            TAG="${{ github.event.inputs.version }}"
+          else
+            TAG="${GITHUB_REF_NAME#v}"
+          fi
+          echo "config.js APP_VERSION = $APP_VERSION"
+          echo "本次目标版本           = $TAG"
+          if [ "$APP_VERSION" != "$TAG" ]; then
+            echo "::error::版本不一致：请先把 config.js 的 APP_VERSION 改为 $TAG 后再发布"
+            exit 1
+          fi
+
+      - name: 安装上传依赖 (miniprogram-ci)
+        working-directory: scripts
+        run: npm install
+
+      - name: 写入上传密钥（来自仓库 Secret）
+        run: printf '%s' "${{ secrets.WECHAT_UPLOAD_KEY }}" > scripts/private.key
+        shell: bash
+
+      - name: 上传至微信（miniprogram-ci）
+        run: node scripts/upload-ci.js
+
+      - name: 清理密钥文件
+        if: always()
+        run: rm -f scripts/private.key
+        shell: bash

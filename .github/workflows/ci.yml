@@ -1,0 +1,37 @@
+name: CI · 构建与测试
+
+on:
+  push:
+    branches: [main, master, develop]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  verify:
+    name: 校验构建与数据完整性
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 配置 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # 小程序无打包步骤，CI 的「构建」即语法校验 + 数据自检
+      - name: 校验全部 JS 文件语法
+        run: |
+          fail=0
+          while IFS= read -r f; do
+            node --check "$f" || { echo "❌ 语法错误: $f"; fail=1; }
+          done < <(find . -name '*.js' -not -path './.git/*' -not -path './node_modules/*')
+          if [ "$fail" -ne 0 ]; then exit 1; fi
+          echo "✅ 全部 JS 语法通过"
+
+      - name: 数据完整性自检 (node check.js)
+        run: node check.js
+
+      - name: 校验 app.json 页面文件齐全
+        run: |
+          node -e "const fs=require('fs');const a=JSON.parse(fs.readFileSync('app.json','utf8'));let bad=[];a.pages.forEach(p=>['js','wxml','json'].forEach(e=>{if(!fs.existsSync(p+'.'+e))bad.push(p+'.'+e)}));if(bad.length){console.error('缺失页面文件:',bad.join(', '));process.exit(1)}console.log('✅ 页面文件齐全 ('+a.pages.length+' 页)')"
