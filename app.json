@@ -1,5 +1,4 @@
 {
-  "desc": "FIBA 篮球裁判员工作台",
   "pages": [
     "pages/index/index",
     "pages/rule-detail/rule-detail",
