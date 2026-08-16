@@ -12,8 +12,10 @@
 
 ## 协作开发（团队）
 
+- **团队协作流程总入口（先读）**：[CONTRIBUTING.md](CONTRIBUTING.md) — 分支策略 / 任务分配 / 进度同步 / 提交规范 / 发版
 - 开发路线图（迭代 / 任务清单）：[docs/ROADMAP.md](docs/ROADMAP.md)
 - Git 工作流与发布规范（分支 / 提交 / 发版 / CI）：[docs/GIT_WORKFLOW.md](docs/GIT_WORKFLOW.md)
+- 文档总索引（全部文档与阅读时机）：[docs/INDEX.md](docs/INDEX.md)
 - 本地校验：`node check.js`（数据完整性）；每次 push / PR 会由 `.github/workflows/ci.yml` 自动校验全部 JS 语法 + 页面文件齐全。
 - 数据文件（`data/*.js`）改动请走 PR，勿直接 push `master`。
 
