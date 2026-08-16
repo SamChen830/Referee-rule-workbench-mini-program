@@ -3,9 +3,9 @@
 // 真机/体验版可在「关于」或调试面板读取 globalData.version 核对。
 module.exports = {
   // 语义化版本号：主版本.次版本.修订
-  APP_VERSION: '1.0.1',
+  APP_VERSION: '1.0.2',
   // 发布代号（可选，便于口头沟通）
-  RELEASE_NAME: 'Claw v1.0.1 · 规则文本排序与OCR清洗修复',
+  RELEASE_NAME: 'Claw v1.0.2 · 裁判法OCR深度清洗',
   // 构建/冻结时间戳（CI 或手动上传时刷新）
-  BUILD_TIME: '2026-08-16T12:55:00+08:00'
+  BUILD_TIME: '2026-08-16T02:20:00+08:00'
 }
